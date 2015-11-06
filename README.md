@@ -29,13 +29,17 @@ If you work on front, you can use browsersync by launching ```make sync``` in an
   - EJS with layout
 - Frontend:
   - Style (less, autoprefixer)
-  - JS (browserify/uglify)
+  - JS (babel + browserify/uglify)
   - Icons (fontello import/export)
   - Assets (imagemin)
 - Dev tools:
   - Browsersync
   - Nodemon
   - full Makefile
+
+## Configuration
+
+Project configuration (all main paths, compilation options, ...) are available in the `config.js` file. The application configuration is separated in another file, `config-app.js`.
 
 ## Makefile entries
 

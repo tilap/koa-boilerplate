@@ -50,6 +50,7 @@ gulp.task('front:js-build', function() {
   var src= config.paths.js.src;
   var dist= config.paths.js.dist;
   return gulp.src(src + '/*.js', { base : src })
+    .pipe($.babel(config.compilation.babel))
     .pipe(
       $.browserify(config.compilation.browserify)
       .on('error', function(err) {
@@ -166,11 +167,6 @@ gulp.task('server:nodemon', function() {
     script: dist + 'site.js',
     ext: 'js html',
     verbose: false,
-    // env: {
-    //   NODE_ENV: env,
-    //   NODE_PATH: cfg.paths.join(':'),
-    //   APP_SLUG: key,
-    // },
     watch: [
       dist + '**/*.js'
     ],
