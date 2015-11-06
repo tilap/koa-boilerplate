@@ -1,0 +1,34 @@
+
+make... what?
+
+  help
+      This help file
+  init NAME=PROJECT_NAME VERSION=1.0.0
+      Initialize the package.json and bower.json files
+  install
+      Npm and Bower install
+  assets
+      Build all the assets
+      gulp shortcut for assets:build
+  build
+      Build server files and front files (without the assets)
+      gulp shortcut for server:build + front:build
+  serve
+      Serve the website
+  watch
+      Serve the website and start watching files
+      gulp shortcut for watch
+  sync
+      Start browsersync. Require to have the server listnening (make start/watch)
+      gulp shortcut for browsersync
+  clean
+      Clean generated files
+      gulp shortcut for front:clean + assets:clean + server:clean
+  fontopen
+      Open fontello gui to select fonticons (LINUX)
+  fontopenmac
+      Open fontello gui to select fonticons (MAC)
+  fontsave
+      Import the fonts from fontello and save it locally.
+      Require make assets to be deployed in public dir
+
