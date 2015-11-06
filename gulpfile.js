@@ -29,7 +29,13 @@ gulp.task('front:css-build', function() {
   var src = config.paths.style.src;
   var dist = config.paths.style.dist;
   return gulp.src(src + '/*.less', { base : src })
-    .pipe($.less(config.compilation.style))
+    .pipe(
+      $.less(config.compilation.style)
+      .on('error', function(err) {
+        console.error('Less compilation error: ' + err.message);
+        this.emit('end');
+      })
+    )
     .pipe($.autoprefixer(config.compilation.autoprefixer))
     .pipe(gulp.dest(dist));
 });
