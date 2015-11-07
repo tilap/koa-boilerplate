@@ -56,15 +56,27 @@ gulp.task('front:js-build', function() {
   var src= config.paths.js.src;
   var dist= config.paths.js.dist;
   return gulp.src(src + '/*.js', { base : src })
-    .pipe($.babel(config.compilation.babel))
+    .pipe(
+      $.babel(config.compilation.babel)
+      .on('error', function(err) {
+        $.util.log($.util.colors.red('Babel front error'), err.message);
+        this.emit('end');
+      })
+    )
     .pipe(
       $.browserify(config.compilation.browserify)
       .on('error', function(err) {
-          console.error('js browserify error: ' + err.message);
-          this.emit('end');
+        $.util.log($.util.colors.red('Browserify error'), err.message);
+        this.emit('end');
       })
     )
-    .pipe($.uglify(config.compilation.uglify))
+    .pipe(
+      $.uglify(config.compilation.uglify)
+      .on('error', function(err) {
+        $.util.log($.util.colors.red('Uglify error'), err.message);
+        this.emit('end');
+      })
+    )
     .pipe(gulp.dest(dist));
 });
 gulp.task('front:js-watch', function() {
@@ -103,7 +115,13 @@ gulp.task('assets:images-build', function() {
   var src= config.paths.assets.src;
   var dist= config.paths.assets.dist;
   return gulp.src(src + '/**/*', { base : src })
-    .pipe($.imagemin(config.compilation.images))
+    .pipe(
+      $.imagemin(config.compilation.images)
+      .on('error', function(err) {
+        $.util.log($.util.colors.red('Imagemin error'), err.message);
+        this.emit('end');
+      })
+    )
     .pipe(gulp.dest(dist));
 });
 gulp.task('assets:images-clean', function(cb) {
@@ -146,7 +164,13 @@ gulp.task('server:es6', function() {
   var src= config.paths.server.src;
   var dist= config.paths.server.dist;
   return gulp.src(src + '/**/*.js')
-    .pipe($.babel(config.compilation.server.babel))
+    .pipe(
+      $.babel(config.compilation.server.babel)
+      .on('error', function(err) {
+        $.util.log($.util.colors.red('Babel server js error'), err.message);
+        this.emit('end');
+      })
+    )
     .pipe(gulp.dest(dist));
 
 });
@@ -155,9 +179,15 @@ gulp.task('server:es6-watch', function(fileStatus) {
   var dist= config.paths.server.dist;
 
   return gulp.watch(src + '/**/*.js', function(fileStatus) {
-    console.log('[ES6 watcher] ' + fileStatus.path.replace(currentPath, '') + ' (' + fileStatus.type + ') ' + ' => transpile it into ' + dist.replace(currentPath, ''));
+    $.util.log('ES6 watcher', fileStatus.path.replace(currentPath, '') + ' (' + fileStatus.type + ') ' + ' => transpile it into ' + dist.replace(currentPath, ''));
     return gulp.src(fileStatus.path, { base : src })
-      .pipe($.babel(config.compilation.server.babel))
+      .pipe(
+        $.babel(config.compilation.server.babel)
+        .on('error', function(err) {
+          $.util.log($.util.colors.red('Babel server js error'), err.message);
+          this.emit('end');
+        })
+      )
       .pipe(gulp.dest(dist));
   });
 });
@@ -179,8 +209,8 @@ gulp.task('server:nodemon', function() {
     delay: 150,
   })
   .on('restart', function (files) {
-    var filesStr = files ? 'Files changed: ' + files.join(', ') : 'user request';
+    var filesStr = files ? 'files changed: ' + files.join(', ') : 'user request';
     filesStr = filesStr.replace(currentPath, '');
-    console.log('[Server restarted]', filesStr);
+    $.util.log('Server restarted', '(' + filesStr + ')');
   });
 });
